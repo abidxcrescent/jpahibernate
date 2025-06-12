@@ -31,8 +31,18 @@ public class UserController {
 //        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Unable to save user");
 
         UserDetails userDetails = new UserDetails("abid","abid@ali.com");
-        userService.saveUsers(userDetails);
 
+        /*
+            These two line where we are saving data and well as fetching data
+            is first level caching.
+            When we call saveUsers it goes from Jpa to
+                a. EntityManger is an interface which has method like persist(), delete()
+                   and Hibernate provides the actual implementation.
+                b. PersistenceContext which holds the state of the Entity before flushing it
+                   to the Database. Flush happens when there is commit in transaction.
+         */
+        userService.saveUsers(userDetails);
+        userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body("User saved successfully");
 
     }
